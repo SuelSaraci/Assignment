@@ -106,6 +106,12 @@ export default {
   methods: {
     async handleSubmit() {
       try {
+        if (this.email.length == 0 || this.password.length == 0) {
+          alert('Please fill out the form')
+
+          return
+        }
+
         this.isLoading = true
 
         await axios.post('https://jsonplaceholder.typicode.com/users', {
@@ -122,6 +128,8 @@ export default {
             })
           )
         } else {
+          this.email = ''
+          this.password = ''
           localStorage.removeItem('userData')
         }
 
