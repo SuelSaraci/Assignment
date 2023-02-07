@@ -96,11 +96,11 @@ export default {
     }
   },
   mounted() {
+    // Get the data is the user selected remember me checkbox
     const data = JSON.parse(localStorage.getItem('userData'))
     if (data) {
       this.email = data.email
       this.password = data.password
-      this.rememberMe = data.rememberMe
     }
   },
   methods: {
@@ -119,7 +119,6 @@ export default {
             JSON.stringify({
               email: this.email,
               password: this.password,
-              rememberMe: this.rememberMe,
             })
           )
         } else {
