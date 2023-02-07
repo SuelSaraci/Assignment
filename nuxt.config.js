@@ -19,7 +19,7 @@ export default {
 
     script: [
       { src: '//googletagmanager.com/gtag/js?id=G-41DBW5E8M1' },
-      { src: 'https://www.googleoptimize.com/optimize.js?id=OPT-5VV7KS2' },
+      { src: 'https://www.googleoptimize.com/optimize.js?id=OPT-THPHV8G' },
       {
         innerHTML: `
         window.dataLayer = window.dataLayer || []
@@ -35,7 +35,7 @@ export default {
   css: ['@/assets/main.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/gtm.js', mode: 'client' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
