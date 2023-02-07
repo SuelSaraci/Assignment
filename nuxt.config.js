@@ -18,13 +18,14 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
 
     script: [
-      { src: '//googletagmanager.com/gtag/js?id=OPT-5VV7KS2' },
+      { src: '//googletagmanager.com/gtag/js?id=G-41DBW5E8M1' },
+      { src: 'https://www.googleoptimize.com/optimize.js?id=OPT-5VV7KS2' },
       {
         innerHTML: `
         window.dataLayer = window.dataLayer || []
         function gtag(){ dataLayer.push(arguments) }
         gtag('js', new Date())
-        gtag('config', 'OPT-5VV7KS2')
+        gtag('config', 'G-41DBW5E8M1')
         `,
       },
     ],
