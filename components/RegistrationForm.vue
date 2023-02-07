@@ -58,6 +58,7 @@
                 name="remember-me"
                 type="checkbox"
                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                @change="updateRememberMe"
               />
               <label for="remember-me" class="ml-2 block text-sm text-gray-900"
                 >Remember me</label
@@ -67,10 +68,12 @@
 
           <div>
             <button
+              :disabled="isLoading"
               type="submit"
               class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Sign up
+              <span v-if="isLoading">Loading...</span>
+              <span v-else>Sign up</span>
             </button>
           </div>
         </form>
@@ -88,29 +91,68 @@ export default {
       name: '',
       email: '',
       password: '',
-      // Add any other form fields here
+      rememberMe: false,
+      isLoading: false,
+    }
+  },
+  mounted() {
+    const data = JSON.parse(localStorage.getItem('userData'))
+    if (data) {
+      this.email = data.email
+      this.password = data.password
+      this.rememberMe = data.rememberMe
     }
   },
   methods: {
     async handleSubmit() {
       try {
-        // Make a post request to the API using axios or another HTTP library
-        const response = await axios.post(
-          'https://jsonplaceholder.typicode.com/users',
-          {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-            // Add any other form data here
-          }
-        )
-        console.log(response)
+        this.isLoading = true
+
+        await axios.post('https://jsonplaceholder.typicode.com/users', {
+          email: this.email,
+          password: this.password,
+        })
+
+        if (this.rememberMe) {
+          localStorage.setItem(
+            'userData',
+            JSON.stringify({
+              email: this.email,
+              password: this.password,
+              rememberMe: this.rememberMe,
+            })
+          )
+        } else {
+          localStorage.removeItem('userData')
+        }
+
+        // Push a GTM event for successful registration
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: 'user-registration',
+          status: 'success',
+        })
+
+        this.isLoading = false
+
+        alert('Signed up Successfully')
       } catch (error) {
         console.error(error)
+
+        // Push a GTM event for failed registration
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: 'user-registration',
+          status: 'failed',
+          error: error.message,
+        })
       }
     },
     updateField(field, value) {
       this[field] = value
+    },
+    updateRememberMe(event) {
+      this.rememberMe = event.target.checked
     },
   },
 }
